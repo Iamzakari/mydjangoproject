@@ -18,6 +18,7 @@ def index(request):
     #include tasks here
     #For user session
     if "tasks" not in request.session:
+        #Use session to make each user have their own task list
         request.session["tasks"] = []
     return render(request, "tasks/index.html", {
         "tasks": request.session["tasks"]
@@ -25,10 +26,11 @@ def index(request):
 
 
 def add(request):
+    #create a variable that take all the data that the user try to submit
     if request.method == "POST":
         form = NewTasksForms(request.POST)
         if form.is_valid():
-            task = form.cleaned_data["task"]
+            task = form.cleaned_data["task"]#this task filed from the class
             request.session["tasks"] += [task]
             return HttpResponseRedirect(reverse("tasks:index"))
         else:
